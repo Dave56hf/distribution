@@ -60,9 +60,9 @@ const heroImages = {
 };
 
 const businessImages = [
-  './workpics/Rectangle 6.png',
-  './workpics/Rectangle 7.png',
-  './workpics/Rectangle 8.png',
+  './Services pic/IMG-20261107-WA0111.jpg',
+  './Services pic/IMG-20261107-WA0112.jpg',
+  './Services pic/IMG-20261107-WA0113.jpg',
 ];
 
 const capabilityImages = [
@@ -72,19 +72,20 @@ const capabilityImages = [
 ];
 
 const partnerMetrics = [
-  { value: '48+', label: 'Strategic partners' },
-  { value: '2.8M', label: 'sq. ft. of warehousing space' },
-  { value: '27', label: 'sales offices' },
+  { value: '26,750+', label: 'Strategic partners' },
+  { value: '7M+', label: 'sq. ft. of warehousing space' },
+  { value: '117', label: 'sales offices' },
   { value: '32', label: 'operational warehouses' },
 ];
 
 const partnerBrands = [
-  { name: 'Airtel', short: 'A', color: '#E11D48' },
-  { name: 'MTN', short: 'M', color: '#F59E0B' },
-  { name: 'Unilever', short: 'U', color: '#2F7D32' },
-  { name: 'Coca-Cola', short: 'C', color: '#D72638' },
-  { name: 'Jumia', short: 'J', color: '#F97316' },
-  { name: 'BIC', short: 'B', color: '#1D4ED8' },
+  { name: 'Shopinverse', image: './selected brand logos/shopinverse.svg' },
+  { name: 'Konga', image: './selected brand logos/konga-seeklogo 1.png' },
+  { name: 'Justrite', image: './selected brand logos/justrite-seeklogo.png' },
+  { name: 'Jumia', image: './selected brand logos/jumia-seeklogo 1.png' },
+  { name: 'Access Bank', image: './selected brand logos/access-bank-plc-seeklogo.png' },
+  { name: 'cemix pro nigeria limited', image: './selected brand logos/cemix pro nigeria limited.png' },
+  { name: 'Staleg mall', image: './selected brand logos/Staleg mall.jpg' },
 ];
 
 function App() {
@@ -196,11 +197,6 @@ function App() {
           <div className="business-grid">
             {businessImages.map((image, index) => (
               <article key={image} className={`business-card ${index === 1 ? 'tall' : ''}`} style={{ backgroundImage: `linear-gradient(180deg, rgba(15, 25, 35, 0.14), rgba(15, 25, 35, 0.14)), url('${image}')` }}>
-                <div className="card-label">
-                  {index === 0 && 'Pharmaceutical Distribution'}
-                  {index === 1 && 'Technology Distribution'}
-                  {index === 2 && 'Construction Products Distribution'}
-                </div>
               </article>
             ))}
           </div>
@@ -261,12 +257,14 @@ function App() {
             </div>
 
             <div className="partner-list">
-              {partnerBrands.map(({ name, short, color }) => (
-                <div key={name} className="partner-item">
-                  <div className="partner-logo" style={{ background: color }} aria-hidden="true">
-                    <span>{short}</span>
+              {partnerBrands.map(({ name, image }) => (
+                <div key={name} className="partner-item" aria-label={name}>
+                  <div className="partner-logo-wrap">
+                    <div className="partner-logo">
+                      <img src={image} alt={name} className="partner-logo-image" />
+                    </div>
+                    <span className="partner-name">{name}</span>
                   </div>
-                  <span className="partner-name">{name}</span>
                 </div>
               ))}
             </div>
