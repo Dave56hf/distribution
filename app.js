@@ -182,8 +182,7 @@ function App() {
           </div>
 
           <div className="image-panel">
-            <div className="panel-visual" aria-label="Illustrative warehouse photography" style={{ backgroundImage: `url('./workpics/About — illustrative warehouse photography.png')` }} />
-            <span className="caption">Illustrative logistics photography</span>
+            <div className="panel-visual" aria-label="Illustrative warehouse photography" style={{ backgroundImage: `url('./Services pic/about.jpg')` }} />
           </div>
         </section>
 
@@ -210,7 +209,7 @@ function App() {
           </div>
           <div className="network-map" aria-label="RootFlow distribution network map">
             <img
-              src="./workpics/1793966216350 1.png"
+              src="./workpics/office map.png"
               alt="RootFlow distribution network map"
               className="network-map-image"
             />
