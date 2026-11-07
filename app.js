@@ -209,7 +209,7 @@ function App() {
           </div>
           <div className="network-map" aria-label="RootFlow distribution network map">
             <img
-              src="./workpics/office map.png"
+              src="./workpics/1793966216350 1.png"
               alt="RootFlow distribution network map"
               className="network-map-image"
             />
