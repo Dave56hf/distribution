@@ -300,7 +300,7 @@ const businessAreas = [
 const capabilityImages = [
   './workpics/Untitled (1)/Frame.png',
   './workpics/Untitled (1)/Frame-1.png',
-  './workpics/Untitled (1)/Frame-2.png',
+  './workpics/Untitled (1)/loading-pic.png',
 ];
 
 const partnerMetrics = [
