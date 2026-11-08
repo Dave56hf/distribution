@@ -413,7 +413,7 @@ function App() {
           <div className="container hero-inner">
             <div className="hero-copy">
               <h1><SplitWords text="Connecting Global Manufacturers to Nigeria's Markets." /></h1>
-                <h5 style={color: white;}>RootFlow global limited is a distribution marketing company with one of the top 3 largest distribution network in nigeria. It is fully registered and incorporated under the Corporate Affairs Commission(CAC) and with RC number - 9991792</h5>
+                <h5 style={{color: 'white'}}>RootFlow global limited is a distribution marketing company with one of the top 3 largest distribution network in nigeria. It is fully registered and incorporated under the Corporate Affairs Commission(CAC) and with RC number - 9991792</h5>
               <p>
                 We help international brands and local distributors move products efficiently across Nigeria, combining operational expertise with local market knowledge.
               </p>
