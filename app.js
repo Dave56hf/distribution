@@ -278,21 +278,21 @@ function App() {
 
           <div className="partnership-grid">
             <article className="partnership-card founder-card">
-              <div className="founder-photo founder-photo-1" style={{ backgroundImage: `url('./founders/IMG-20261106-WA0036.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center top', backgroundRepeat: 'no-repeat' }} />
+              <img className="founder-photo founder-photo-1" src="./founders/IMG-20261106-WA0036.jpg" alt="Igba Matthew Alexander" />
               <div className="founder-copy">
                 <h3>Igba Matthew Alexander</h3>
                 <p>Co-founder, Managing Director RootFlow Global Limited</p>
               </div>
             </article>
             <article className="partnership-card founder-card">
-              <div className="founder-photo founder-photo-2" style={{ backgroundImage: `url('./founders/IMG-20261106-WA0037.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center top', backgroundRepeat: 'no-repeat' }} />
+              <img className="founder-photo founder-photo-2" src="./founders/IMG-20261106-WA0037.jpg" alt="Daniel Oluwatobiloba Olusade" />
               <div className="founder-copy">
                 <h3>Daniel Oluwatobiloba Olusade</h3>
                 <p>Co-founder, Chairman, Board of Directors, RootFlow Global Limited</p>
               </div>
             </article>
             <article className="partnership-card founder-card">
-              <div className="founder-photo founder-photo-3" style={{ backgroundImage: `url('./founders/IMG-20261107-WA0074.jpg')`, backgroundSize: 'cover', backgroundPosition: 'center top', backgroundRepeat: 'no-repeat' }} />
+              <img className="founder-photo founder-photo-3" src="./founders/IMG-20261107-WA0074.jpg" alt="Ekoh Ofure Jane" />
               <div className="founder-copy">
                 <h3>Ekoh Ofure Jane</h3>
                 <p>Chief Financial Officer, RootFlow Global Limited</p>

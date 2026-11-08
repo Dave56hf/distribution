@@ -576,6 +576,7 @@ h2 {
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 26px;
   margin-top: 30px;
+  align-items: start;
 }
 
 .partnership-card {
@@ -593,11 +594,9 @@ h2 {
 }
 
 .founder-photo {
+  display: block;
   width: 100%;
-  height: clamp(260px, 26vw, 360px);
-  background-size: cover !important;
-  background-position: center top;
-  background-repeat: no-repeat;
+  height: auto;
 }
 
 .founder-copy {
