@@ -657,10 +657,10 @@ function App() {
           <div className="footer-links">
             <h3>Contact details</h3>
             <ul>
-              <li>[Email to be supplied]</li>
-              <li>[Phone to be supplied]</li>
-              <li>[Address to be supplied]</li>
-              <li>Social links: [URLs to be supplied]</li>
+              <li>Email: rootflowglobal@gmail.com</li>
+              <li>Phone: 08130202741,08168515366</li>
+              <li>Address: Lagos Office: Block B, Lofty Heights Office complex, Baderinwa Alabi St, Lekki Phase I, Lekki 106104, Lagos
+                  Abuja Office: Office Complex 078, Wuye Ultra Modern Market, Utako, Abuja,Port harcourt</li>
             </ul>
           </div>
         </div>
