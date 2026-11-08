@@ -184,7 +184,7 @@ img {
 .hero h5 {
   font-size: clamp(1.08rem, 2vw, 1.8rem);
   line-height: 1.55;
-  color: rgba(0, 0, 0, 0.78);
+  color: white;
   font-weight: 300;
 }
 
