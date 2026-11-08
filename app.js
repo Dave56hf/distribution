@@ -84,7 +84,7 @@ function useSiteAnimations() {
           scrollTrigger: onScroll('.image-panel', 'top 85%'),
         });
       gsap.from('.panel-visual', {
-        scale: 1.18, duration: 1.8, ease, clearProps: 'transform',
+        scale: 1.1, duration: 1.8, ease, clearProps: 'transform',
         scrollTrigger: onScroll('.image-panel', 'top 85%'),
       });
 

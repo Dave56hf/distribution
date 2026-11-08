@@ -14,6 +14,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: clip;
 }
 
 body {
@@ -22,7 +23,7 @@ body {
   background: var(--bg);
   color: var(--ink);
   line-height: 1.5;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 #root {
@@ -1016,7 +1017,7 @@ h2 {
 .hero::before {
   content: "";
   position: absolute;
-  inset: 0 -40px -20px;
+  inset: 0 0 -20px;
   z-index: -1;
   pointer-events: none;
   background-image: radial-gradient(rgba(10, 43, 77, 0.2) 1.2px, transparent 1.5px);
@@ -1056,9 +1057,9 @@ h2 {
 .about-section::after {
   content: "";
   position: absolute;
-  right: -6%;
+  right: 0;
   top: 50%;
-  width: 46%;
+  width: 42%;
   aspect-ratio: 1;
   transform: translateY(-50%);
   z-index: -1;
@@ -1193,5 +1194,11 @@ h2 {
   .network-section,
   .reach-section {
     padding-bottom: 40px;
+  }
+}
+
+@supports not (overflow: clip) {
+  body {
+    overflow-x: hidden;
   }
 }
