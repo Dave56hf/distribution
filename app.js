@@ -1,4 +1,159 @@
-const { useEffect, useRef, useState } = React;
+const { useEffect, useLayoutEffect, useRef, useState } = React;
+
+// Splits a heading into masked words so GSAP can slide them up one by one.
+function SplitWords({ text }) {
+  const words = text.split(' ');
+  return words.map((word, index) => (
+    <React.Fragment key={`${word}-${index}`}>
+      <span className="word-mask"><span className="word">{word}</span></span>
+      {index < words.length - 1 ? ' ' : null}
+    </React.Fragment>
+  ));
+}
+
+// All site motion lives here (GSAP + ScrollTrigger). If GSAP fails to load,
+// or the visitor prefers reduced motion, the page simply stays static.
+function useSiteAnimations() {
+  useLayoutEffect(() => {
+    const { gsap, ScrollTrigger } = window;
+    if (!gsap || !ScrollTrigger) return undefined;
+
+    gsap.registerPlugin(ScrollTrigger);
+    const mm = gsap.matchMedia();
+
+    mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const ease = 'power3.out';
+      const clear = 'transform,opacity,visibility';
+      const onScroll = (trigger, start = 'top 88%') => ({ trigger, start, once: true });
+
+      // Page load: header drops in, hero headline reveals word by word
+      gsap.timeline({ defaults: { ease } })
+        .from('.site-header', { yPercent: -100, opacity: 0, duration: 0.8, clearProps: clear })
+        .from('.hero h1 .word', { yPercent: 115, duration: 0.95, stagger: 0.07, clearProps: clear }, '-=0.45')
+        .from('.hero p', { y: 26, opacity: 0, duration: 0.8, clearProps: clear }, '-=0.55')
+        .from('.hero-actions .btn', { y: 22, opacity: 0, duration: 0.65, stagger: 0.12, clearProps: clear }, '-=0.5');
+
+      // Thin progress bar along the top of the page
+      gsap.to('.scroll-progress', {
+        scaleX: 1,
+        ease: 'none',
+        scrollTrigger: { start: 0, end: 'max', scrub: 0.3 },
+      });
+
+      // Trust strip
+      gsap.from('.stat-item', {
+        y: 34, opacity: 0, duration: 0.8, stagger: 0.12, ease, clearProps: clear,
+        scrollTrigger: onScroll('.stats', 'top 92%'),
+      });
+      gsap.from('.stat-icon', {
+        scale: 0.5, duration: 0.9, stagger: 0.12, ease: 'back.out(1.8)', clearProps: clear,
+        scrollTrigger: onScroll('.stats', 'top 92%'),
+      });
+
+      // Section intros: eyebrow, heading, copy and buttons rise in sequence
+      gsap.utils
+        .toArray('.section-copy, .section-header, .network-copy, .capabilities-header, .reach-header, .contact-copy, .cta-content')
+        .forEach((block) => {
+          gsap.from(block.children, {
+            y: 40, opacity: 0, duration: 0.9, stagger: 0.12, ease, clearProps: clear,
+            scrollTrigger: onScroll(block),
+          });
+        });
+      gsap.from('.lead', {
+        y: 30, opacity: 0, duration: 0.9, ease, clearProps: clear,
+        scrollTrigger: onScroll('.lead', 'top 90%'),
+      });
+
+      // About image: wipes open while the photo settles from a slight zoom
+      gsap.fromTo('.image-panel',
+        { clipPath: 'inset(0% 0% 100% 0% round 20px)' },
+        {
+          clipPath: 'inset(0% 0% 0% 0% round 20px)', duration: 1.3, ease: 'power3.inOut', clearProps: 'clipPath',
+          scrollTrigger: onScroll('.image-panel', 'top 85%'),
+        });
+      gsap.from('.panel-visual', {
+        scale: 1.18, duration: 1.8, ease, clearProps: 'transform',
+        scrollTrigger: onScroll('.image-panel', 'top 85%'),
+      });
+
+      // Business areas + capabilities cards
+      gsap.from('.business-card', {
+        y: 70, opacity: 0, scale: 0.95, duration: 1, stagger: 0.16, ease, clearProps: clear,
+        scrollTrigger: onScroll('.business-grid', 'top 85%'),
+      });
+      gsap.from('.capability-card', {
+        y: 70, opacity: 0, scale: 0.95, duration: 1, stagger: 0.16, ease, clearProps: clear,
+        scrollTrigger: onScroll('.capability-grid', 'top 85%'),
+      });
+
+      // Network map
+      gsap.from('.network-map-image', {
+        opacity: 0, scale: 0.9, duration: 1.3, ease, clearProps: clear,
+        scrollTrigger: onScroll('.network-map', 'top 85%'),
+      });
+
+      // Reach metrics: cards rise, numbers count up
+      gsap.from('.metric-card', {
+        y: 40, opacity: 0, duration: 0.8, stagger: 0.12, ease, clearProps: clear,
+        scrollTrigger: onScroll('.reach-metrics', 'top 88%'),
+      });
+      gsap.utils.toArray('.metric-value').forEach((el) => {
+        const original = el.textContent;
+        const target = parseFloat(original.replace(/,/g, ''));
+        if (Number.isNaN(target)) return;
+        const suffix = original.replace(/[0-9.,]/g, '');
+        const counter = { value: 0 };
+        el.textContent = `0${suffix}`;
+        gsap.to(counter, {
+          value: target,
+          duration: 2,
+          ease: 'power2.out',
+          scrollTrigger: onScroll(el, 'top 92%'),
+          onUpdate: () => { el.textContent = `${Math.round(counter.value).toLocaleString('en-US')}${suffix}`; },
+          onComplete: () => { el.textContent = original; },
+        });
+      });
+
+      // Partner logos
+      gsap.from('.partner-item', {
+        y: 24, opacity: 0, scale: 0.92, duration: 0.7, stagger: 0.07, ease, clearProps: clear,
+        scrollTrigger: onScroll('.partner-list', 'top 90%'),
+      });
+
+      // Leadership cards: rise in, photo eases out of a slight zoom inside the card
+      gsap.from('.founder-card', {
+        y: 80, opacity: 0, duration: 1, stagger: 0.18, ease, clearProps: clear,
+        scrollTrigger: onScroll('.partnership-grid', 'top 85%'),
+      });
+      gsap.from('.founder-photo', {
+        scale: 1.15, duration: 1.6, stagger: 0.18, ease, clearProps: 'transform',
+        scrollTrigger: onScroll('.partnership-grid', 'top 85%'),
+      });
+
+      // Contact form fields
+      gsap.from('.contact-form .field, .contact-form .submit-btn', {
+        y: 26, opacity: 0, duration: 0.7, stagger: 0.08, ease, clearProps: clear,
+        scrollTrigger: onScroll('.contact-form', 'top 85%'),
+      });
+
+      // Footer columns
+      gsap.from('.footer-grid > div', {
+        y: 30, opacity: 0, duration: 0.8, stagger: 0.12, ease, clearProps: clear,
+        scrollTrigger: onScroll('.site-footer', 'top 95%'),
+      });
+    });
+
+    // Images and fonts change the page height, so re-measure once they settle.
+    const refresh = () => ScrollTrigger.refresh();
+    window.addEventListener('load', refresh);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+
+    return () => {
+      window.removeEventListener('load', refresh);
+      mm.revert();
+    };
+  }, []);
+}
 
 const navItems = [
   { label: 'Home', href: '#home' },
@@ -92,6 +247,8 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
 
+  useSiteAnimations();
+
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
@@ -116,6 +273,7 @@ function App() {
 
   return (
     <>
+      <div className="scroll-progress" aria-hidden="true" />
       <header className="site-header">
         <div className="container nav-wrap" ref={menuRef}>
           <div className="brand" aria-label="RootFlow logo">
@@ -148,7 +306,7 @@ function App() {
       <main>
         <section className="hero container" id="home">
           <div className="hero-copy">
-            <h1>Connecting Global Manufacturers to Nigeria&apos;s Markets.</h1>
+            <h1><SplitWords text="Connecting Global Manufacturers to Nigeria's Markets." /></h1>
             <p>
               We help international brands and local distributors move products efficiently across Nigeria, combining operational expertise with local market knowledge.
             </p>
