@@ -40,6 +40,18 @@ function useSiteAnimations() {
         scrollTrigger: { start: 0, end: 'max', scrub: 0.3 },
       });
 
+      // Background glows drift slowly and swell as you scroll
+      const drift = { ease: 'sine.inOut', repeat: -1, yoyo: true };
+      gsap.to('.blob-1', { x: -70, y: 50, duration: 14, ...drift });
+      gsap.to('.blob-2', { x: 80, y: -60, duration: 17, ...drift });
+      gsap.to('.blob-3', { x: -50, y: 70, duration: 12, ...drift });
+      [['.blob-1', 1.3], ['.blob-2', 1.4], ['.blob-3', 0.8]].forEach(([blob, scale]) => {
+        gsap.to(blob, {
+          scale, ease: 'none',
+          scrollTrigger: { start: 0, end: 'max', scrub: 1 },
+        });
+      });
+
       // Trust strip
       gsap.from('.stat-item', {
         y: 34, opacity: 0, duration: 0.8, stagger: 0.12, ease, clearProps: clear,
@@ -273,6 +285,11 @@ function App() {
 
   return (
     <>
+      <div className="ambient" aria-hidden="true">
+        <span className="blob blob-1" />
+        <span className="blob blob-2" />
+        <span className="blob blob-3" />
+      </div>
       <div className="scroll-progress" aria-hidden="true" />
       <header className="site-header">
         <div className="container nav-wrap" ref={menuRef}>
