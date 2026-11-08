@@ -19,7 +19,7 @@ html {
 
 body {
   margin: 0;
-  font-family: "Inter", sans-serif;
+  font-family: "Poppins", "Inter", sans-serif;
   background: var(--bg);
   color: var(--ink);
   line-height: 1.5;
@@ -1200,5 +1200,409 @@ h2 {
 @supports not (overflow: clip) {
   body {
     overflow-x: hidden;
+  }
+}
+
+
+/* ------------------------------------------------------------------
+   Image-led layout: photo hero, labelled cards, photo stats panel,
+   network footer, floating buttons, and the Poppins type setup.
+------------------------------------------------------------------- */
+
+/* Type: Poppins is wider than Inter, so the tight tracking is eased */
+h1,
+h2 {
+  font-weight: 600;
+  letter-spacing: -0.035em;
+}
+
+.hero h1 {
+  font-weight: 600;
+  letter-spacing: -0.04em;
+  font-size: clamp(2.3rem, 4.6vw, 4.6rem);
+  line-height: 1.08;
+}
+
+.metric-value {
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.partnership-card h3 {
+  letter-spacing: -0.03em;
+}
+
+.btn,
+.stat-text {
+  letter-spacing: -0.005em;
+}
+
+/* Hero: full width photo slider with a dark shade and white text */
+.hero {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  min-height: 600px;
+  min-height: min(88svh, 780px);
+  padding: 90px 0 130px;
+  overflow: hidden;
+  isolation: isolate;
+  background: #0d0d0d;
+}
+
+.hero::before {
+  display: none;
+}
+
+.hero-slides,
+.hero-shade {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center 40%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.hero-slide:first-child {
+  opacity: 1;
+}
+
+.hero-shade {
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(8, 18, 30, 0.6), rgba(8, 18, 30, 0) 75%),
+    linear-gradient(180deg, rgba(8, 18, 30, 0.5) 0%, rgba(8, 18, 30, 0.4) 40%, rgba(8, 18, 30, 0.85) 100%);
+}
+
+.hero-inner {
+  position: relative;
+  z-index: 2;
+}
+
+.hero h1 {
+  color: #fff;
+}
+
+.hero p {
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.hero .btn-primary {
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  box-shadow: 0 18px 28px rgba(0, 0, 0, 0.35);
+}
+
+.hero .btn-secondary {
+  border-color: transparent;
+}
+
+.hero-dots {
+  display: flex;
+  gap: 10px;
+  margin-top: 36px;
+}
+
+.hero-dot {
+  position: relative;
+  width: 34px;
+  height: 4px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  transition: width 0.35s ease, background 0.35s ease;
+}
+
+.hero-dot::after {
+  content: "";
+  position: absolute;
+  inset: -14px -4px;
+}
+
+.hero-dot.active {
+  width: 56px;
+  background: #fff;
+}
+
+/* Trust card overlaps the bottom of the hero */
+.stats {
+  position: relative;
+  z-index: 3;
+  margin-top: -64px;
+}
+
+/* Business area cards: photo, shade, title, text, link */
+.business-card {
+  display: block;
+  min-height: 340px;
+  isolation: isolate;
+  color: #fff;
+}
+
+.business-card.tall {
+  min-height: 460px;
+}
+
+.card-media {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.card-shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 18, 30, 0) 30%, rgba(8, 18, 30, 0.9) 100%);
+}
+
+.card-body {
+  position: absolute;
+  left: 22px;
+  right: 22px;
+  bottom: 20px;
+}
+
+.card-body h3 {
+  margin: 0 0 6px;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.card-body p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.84);
+}
+
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.card-link span {
+  transition: translate 0.3s ease;
+}
+
+@media (hover: hover) {
+  .business-card:hover .card-media {
+    transform: scale(1.08);
+  }
+
+  .business-card:hover .card-link span {
+    translate: 6px 0;
+  }
+}
+
+/* Reach: stats sit on a navy panel over a warehouse photo */
+.reach-metrics {
+  position: relative;
+  overflow: hidden;
+  gap: 16px;
+  padding: 28px;
+  border-radius: 28px;
+  background:
+    linear-gradient(rgba(10, 43, 77, 0.84), rgba(10, 43, 77, 0.74)),
+    url('./Services pic/about.jpg') center / cover no-repeat;
+  box-shadow: 0 24px 54px rgba(10, 43, 77, 0.25);
+}
+
+.reach-metrics .metric-card {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: none;
+  backdrop-filter: blur(4px);
+}
+
+.reach-metrics .metric-card::before {
+  background: linear-gradient(90deg, #d6e5f4, rgba(214, 229, 244, 0));
+}
+
+.reach-metrics .metric-value {
+  color: #fff;
+}
+
+.reach-metrics .metric-label {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+@media (hover: hover) {
+  .reach-metrics .metric-card:hover {
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.25);
+  }
+}
+
+/* Footer: faint network lines with light running along the routes */
+.site-footer {
+  position: relative;
+  overflow: hidden;
+}
+
+.site-footer > .container {
+  position: relative;
+  z-index: 1;
+}
+
+.footer-art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.footer-lines path {
+  stroke: rgba(214, 229, 244, 0.09);
+}
+
+.footer-routes .route {
+  stroke: rgba(214, 229, 244, 0.6);
+  stroke-dasharray: 70 530;
+  animation: route-run 9s linear infinite;
+}
+
+.footer-routes .route-2 { animation-duration: 12s; animation-delay: -3s; }
+.footer-routes .route-3 { animation-duration: 10s; animation-delay: -6s; }
+.footer-routes .route-4 { animation-duration: 13s; animation-delay: -1s; }
+
+@keyframes route-run {
+  to { stroke-dashoffset: -600; }
+}
+
+.node {
+  fill: #d6e5f4;
+  opacity: 0.4;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: node-pulse 3.6s ease-in-out infinite;
+}
+
+.node-2 { animation-delay: -0.8s; }
+.node-3 { animation-delay: -1.6s; }
+.node-4 { animation-delay: -2.4s; }
+.node-5 { animation-delay: -3s; }
+
+@keyframes node-pulse {
+  0%, 100% { opacity: 0.25; transform: scale(1); }
+  50% { opacity: 0.95; transform: scale(1.9); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .footer-routes .route,
+  .node {
+    animation: none;
+  }
+}
+
+/* Floating buttons */
+.enquiry-fab {
+  position: fixed;
+  right: 16px;
+  bottom: 84px;
+  z-index: 55;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  background: #0d0d0d;
+  color: #fff;
+  font-size: 0.88rem;
+  font-weight: 600;
+  box-shadow: 0 14px 28px rgba(10, 43, 77, 0.3);
+  transition: translate 0.2s ease;
+}
+
+.enquiry-fab:hover {
+  translate: 0 -2px;
+}
+
+.enquiry-fab svg,
+.to-top svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.enquiry-fab svg {
+  stroke: #fff;
+}
+
+.to-top {
+  position: fixed;
+  right: 16px;
+  bottom: 20px;
+  z-index: 55;
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  padding: 0;
+  border-radius: 50%;
+  border: 1px solid rgba(10, 43, 77, 0.12);
+  background: #fff;
+  box-shadow: 0 12px 24px rgba(10, 43, 77, 0.18);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  translate: 0 12px;
+  transition: opacity 0.3s ease, visibility 0.3s ease, translate 0.3s ease;
+}
+
+.to-top svg {
+  stroke: var(--primary);
+}
+
+.to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  translate: 0 0;
+}
+
+@media (max-width: 640px) {
+  .hero {
+    min-height: 560px;
+    min-height: min(86svh, 700px);
+    padding: 56px 0 112px;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 9vw, 2.7rem);
+    line-height: 1.1;
+  }
+
+  .stats {
+    margin-top: -56px;
+  }
+
+  .business-card {
+    min-height: 320px;
+  }
+
+  .business-card.tall {
+    min-height: 420px;
+  }
+
+  .reach-metrics {
+    padding: 16px;
   }
 }

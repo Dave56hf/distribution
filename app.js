@@ -33,6 +33,44 @@ function useSiteAnimations() {
         .from('.hero p', { y: 26, opacity: 0, duration: 0.8, clearProps: clear }, '-=0.55')
         .from('.hero-actions .btn', { y: 22, opacity: 0, duration: 0.65, stagger: 0.12, clearProps: clear }, '-=0.5');
 
+      // Hero photo slider: crossfade with a slow zoom, auto plays, dots are clickable
+      const slides = gsap.utils.toArray('.hero-slide');
+      const dots = gsap.utils.toArray('.hero-dot');
+      let slideTimer;
+      const cleanups = [];
+      if (slides.length > 1) {
+        let current = 0;
+        gsap.set(slides, { autoAlpha: 0, zIndex: 0 });
+        gsap.set(slides[0], { autoAlpha: 1, zIndex: 1 });
+        gsap.fromTo(slides[0], { scale: 1.12 }, { scale: 1, duration: 8, ease: 'none' });
+        if (dots[0]) dots[0].classList.add('active');
+
+        const goTo = (next) => {
+          if (next === current) return;
+          const from = slides[current];
+          const to = slides[next];
+          gsap.set(to, { zIndex: 2 });
+          gsap.set(from, { zIndex: 1 });
+          gsap.fromTo(to, { autoAlpha: 0 }, {
+            autoAlpha: 1, duration: 1.4, ease: 'power2.inOut',
+            onComplete: () => { gsap.set(from, { autoAlpha: 0 }); },
+          });
+          gsap.fromTo(to, { scale: 1.12 }, { scale: 1, duration: 8, ease: 'none', overwrite: 'auto' });
+          dots.forEach((dot, i) => dot.classList.toggle('active', i === next));
+          current = next;
+        };
+        const play = () => {
+          window.clearInterval(slideTimer);
+          slideTimer = window.setInterval(() => goTo((current + 1) % slides.length), 6000);
+        };
+        dots.forEach((dot, i) => {
+          const handler = () => { goTo(i); play(); };
+          dot.addEventListener('click', handler);
+          cleanups.push(() => dot.removeEventListener('click', handler));
+        });
+        play();
+      }
+
       // Thin progress bar along the top of the page
       gsap.to('.scroll-progress', {
         scaleX: 1,
@@ -91,6 +129,10 @@ function useSiteAnimations() {
       // Business areas + capabilities cards
       gsap.from('.business-card', {
         y: 70, opacity: 0, scale: 0.95, duration: 1, stagger: 0.16, ease, clearProps: clear,
+        scrollTrigger: onScroll('.business-grid', 'top 85%'),
+      });
+      gsap.from('.card-body > *', {
+        y: 24, opacity: 0, duration: 0.8, stagger: 0.08, delay: 0.35, ease, clearProps: clear,
         scrollTrigger: onScroll('.business-grid', 'top 85%'),
       });
       gsap.from('.capability-card', {
@@ -153,6 +195,11 @@ function useSiteAnimations() {
         y: 30, opacity: 0, duration: 0.8, stagger: 0.12, ease, clearProps: clear,
         scrollTrigger: onScroll('.site-footer', 'top 95%'),
       });
+
+      return () => {
+        window.clearInterval(slideTimer);
+        cleanups.forEach((fn) => fn());
+      };
     });
 
     // Images and fonts change the page height, so re-measure once they settle.
@@ -226,10 +273,28 @@ const heroImages = {
   smallBottom: './workpics/Untitled (1)/Frame-2.png',
 };
 
-const businessImages = [
-  './Services pic/IMG-20261107-WA0111.jpg',
+const heroSlides = [
   './Services pic/IMG-20261107-WA0112.jpg',
+  './Services pic/IMG-20261107-WA0111.jpg',
   './Services pic/IMG-20261107-WA0113.jpg',
+];
+
+const businessAreas = [
+  {
+    title: 'Construction Products',
+    text: 'Moving building and construction materials to sites and stockists across Nigeria.',
+    image: './Services pic/IMG-20261107-WA0111.jpg',
+  },
+  {
+    title: 'Pharmaceuticals',
+    text: 'Reliable storage and distribution of pharmaceutical products nationwide.',
+    image: './Services pic/IMG-20261107-WA0112.jpg',
+  },
+  {
+    title: 'Technology Products',
+    text: 'Getting technology and electronics from global brands to Nigerian markets.',
+    image: './Services pic/IMG-20261107-WA0113.jpg',
+  },
 ];
 
 const capabilityImages = [
@@ -258,8 +323,18 @@ const partnerBrands = [
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
+  const topRef = useRef(null);
 
   useSiteAnimations();
+
+  useEffect(() => {
+    const onScroll = () => {
+      if (topRef.current) topRef.current.classList.toggle('visible', window.scrollY > 600);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   useEffect(() => {
     const handleOutsideClick = (event) => {
@@ -291,6 +366,13 @@ function App() {
         <span className="blob blob-3" />
       </div>
       <div className="scroll-progress" aria-hidden="true" />
+      <a className="enquiry-fab" href="#contact" aria-label="Send an enquiry">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z" /></svg>
+        <span>Enquiry</span>
+      </a>
+      <button className="to-top" type="button" aria-label="Back to top" ref={topRef} onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M5 12l7-7 7 7" /></svg>
+      </button>
       <header className="site-header">
         <div className="container nav-wrap" ref={menuRef}>
           <div className="brand" aria-label="RootFlow logo">
@@ -321,15 +403,28 @@ function App() {
       </header>
 
       <main>
-        <section className="hero container" id="home">
-          <div className="hero-copy">
-            <h1><SplitWords text="Connecting Global Manufacturers to Nigeria's Markets." /></h1>
-            <p>
-              We help international brands and local distributors move products efficiently across Nigeria, combining operational expertise with local market knowledge.
-            </p>
-            <div className="hero-actions">
-              <a className="btn btn-primary" href="#services">Explore Our Services</a>
-              <a className="btn btn-secondary" href="#partnership">Become a Partner</a>
+        <section className="hero" id="home">
+          <div className="hero-slides" aria-hidden="true">
+            {heroSlides.map((image) => (
+              <div key={image} className="hero-slide" style={{ backgroundImage: `url('${image}')` }} />
+            ))}
+          </div>
+          <div className="hero-shade" aria-hidden="true" />
+          <div className="container hero-inner">
+            <div className="hero-copy">
+              <h1><SplitWords text="Connecting Global Manufacturers to Nigeria's Markets." /></h1>
+              <p>
+                We help international brands and local distributors move products efficiently across Nigeria, combining operational expertise with local market knowledge.
+              </p>
+              <div className="hero-actions">
+                <a className="btn btn-primary" href="#services">Explore Our Services</a>
+                <a className="btn btn-secondary" href="#partnership">Become a Partner</a>
+              </div>
+            </div>
+            <div className="hero-dots" role="tablist" aria-label="Hero slides">
+              {heroSlides.map((image, index) => (
+                <button key={image} className="hero-dot" type="button" aria-label={`Show slide ${index + 1}`} data-slide={index} />
+              ))}
             </div>
           </div>
         </section>
@@ -369,8 +464,15 @@ function App() {
           <p className="lead">We support three core business areas across pharmaceuticals, technology and construction products distribution.</p>
 
           <div className="business-grid">
-            {businessImages.map((image, index) => (
-              <article key={image} className={`business-card ${index === 1 ? 'tall' : ''}`} style={{ backgroundImage: `linear-gradient(180deg, rgba(15, 25, 35, 0.14), rgba(15, 25, 35, 0.14)), url('${image}')` }}>
+            {businessAreas.map(({ title, text, image }, index) => (
+              <article key={title} className={`business-card ${index === 1 ? 'tall' : ''}`}>
+                <div className="card-media" style={{ backgroundImage: `url('${image}')` }} />
+                <div className="card-shade" />
+                <div className="card-body">
+                  <h3>{title}</h3>
+                  <p>{text}</p>
+                  <a className="card-link" href="#contact">Enquire <span aria-hidden="true">&rarr;</span></a>
+                </div>
               </article>
             ))}
           </div>
@@ -504,6 +606,29 @@ function App() {
       </main>
 
       <footer className="site-footer">
+        <svg className="footer-art" viewBox="0 0 1200 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <g className="footer-lines" fill="none" strokeWidth="1.2">
+            <path d="M-60 430 L380 40" />
+            <path d="M80 560 L640 -30" />
+            <path d="M380 560 L1000 -40" />
+            <path d="M720 560 L1280 10" />
+            <path d="M-60 250 L220 -40" />
+            <path d="M980 560 L1300 230" />
+          </g>
+          <g className="footer-routes" fill="none" strokeWidth="2" strokeLinecap="round">
+            <path className="route route-1" pathLength="600" d="M-60 430 L380 40" />
+            <path className="route route-2" pathLength="600" d="M80 560 L640 -30" />
+            <path className="route route-3" pathLength="600" d="M380 560 L1000 -40" />
+            <path className="route route-4" pathLength="600" d="M720 560 L1280 10" />
+          </g>
+          <g className="footer-nodes">
+            <circle className="node node-1" cx="232" cy="171" r="3.5" />
+            <circle className="node node-2" cx="470" cy="165" r="3.5" />
+            <circle className="node node-3" cx="760" cy="215" r="3.5" />
+            <circle className="node node-4" cx="1000" cy="260" r="3.5" />
+            <circle className="node node-5" cx="560" cy="430" r="3.5" />
+          </g>
+        </svg>
         <div className="container footer-grid">
           <div className="footer-branding">
             <div className="brand">RootFlow</div>
