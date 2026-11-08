@@ -542,7 +542,6 @@ function App() {
 
         <div className="container footer-bottom">
           <span>© {new Date().getFullYear()} RootFlow Global Limited. All rights reserved.</span>
-          <span>Photography is illustrative; not a record of company-owned facilities.</span>
         </div>
       </footer>
     </>
