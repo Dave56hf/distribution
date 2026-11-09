@@ -272,6 +272,9 @@ const renderStatIcon = (icon) => {
   return icons[icon] || icons.calendar;
 };
 
+const CONTACT_EMAIL = 'rootflowglobal@gmail.com';
+const emptyForm = { name: '', email: '', phone: '', organisation: '', country: '', message: '' };
+
 const cities = ['Abuja', 'Jos', 'Benin', 'Calabar', 'Enugu', 'Onitsha', 'Lagos', 'Ibadan'];
 
 const heroImages = {
@@ -346,6 +349,62 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [lightbox, setLightbox] = useState(null);
   const [galleryOpen, setGalleryOpen] = useState(false);
+  const [form, setForm] = useState(emptyForm);
+  const [formStatus, setFormStatus] = useState({ state: 'idle', message: '' });
+
+  const updateField = (event) => {
+    const { name, value } = event.target;
+    setForm((current) => ({ ...current, [name]: value }));
+    if (formStatus.state !== 'idle' && formStatus.state !== 'sending') setFormStatus({ state: 'idle', message: '' });
+  };
+
+  const submitEnquiry = async (event) => {
+    event.preventDefault();
+    if (formStatus.state === 'sending') return;
+
+    // Hidden trap field: real visitors never fill it in, spam bots do
+    if (event.target.elements._honey && event.target.elements._honey.value) return;
+
+    if (!form.name.trim() || !form.email.trim() || !form.message.trim()) {
+      setFormStatus({ state: 'error', message: 'Please fill in your name, email address and message.' });
+      return;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      setFormStatus({ state: 'error', message: 'Please enter a valid email address.' });
+      return;
+    }
+
+    setFormStatus({ state: 'sending', message: '' });
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          email: form.email.trim(),
+          phone: form.phone.trim(),
+          organisation: form.organisation.trim(),
+          country: form.country.trim(),
+          message: form.message.trim(),
+          _subject: `New website enquiry from ${form.name.trim()}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      });
+      const result = await response.json().catch(() => ({}));
+      if (response.ok && (result.success === true || result.success === 'true')) {
+        setForm(emptyForm);
+        setFormStatus({ state: 'sent', message: 'Thank you. Your message has been sent and we will get back to you shortly.' });
+      } else {
+        throw new Error(result.message || 'Request failed');
+      }
+    } catch (error) {
+      setFormStatus({
+        state: 'error',
+        message: `Sorry, your message could not be sent. Please try again, or email us directly at ${CONTACT_EMAIL}.`,
+      });
+    }
+  };
   const menuRef = useRef(null);
   const topRef = useRef(null);
 
@@ -688,14 +747,18 @@ function App() {
             <h2>Fill up your details and we will get back to you</h2>
           </div>
 
-          <form className="contact-form" onSubmit={(e) => e.preventDefault()}>
-            <div className="field"><input type="text" placeholder="Full name" /></div>
-            <div className="field"><input type="email" placeholder="Email address" /></div>
-            <div className="field"><input type="tel" placeholder="Phone number" /></div>
-            <div className="field"><input type="text" placeholder="Organisation/company" /></div>
-            <div className="field"><input type="text" placeholder="Country" /></div>
-            <div className="field textarea-field"><textarea placeholder="Message" /></div>
-            <button type="submit" className="btn btn-primary submit-btn">Submit</button>
+          <form className="contact-form" onSubmit={submitEnquiry} noValidate>
+            <div className="field"><input type="text" name="name" placeholder="Full name" aria-label="Full name" autoComplete="name" required value={form.name} onChange={updateField} /></div>
+            <div className="field"><input type="email" name="email" placeholder="Email address" aria-label="Email address" autoComplete="email" required value={form.email} onChange={updateField} /></div>
+            <div className="field"><input type="tel" name="phone" placeholder="Phone number" aria-label="Phone number" autoComplete="tel" value={form.phone} onChange={updateField} /></div>
+            <div className="field"><input type="text" name="organisation" placeholder="Organisation/company" aria-label="Organisation or company" autoComplete="organization" value={form.organisation} onChange={updateField} /></div>
+            <div className="field"><input type="text" name="country" placeholder="Country" aria-label="Country" autoComplete="country-name" value={form.country} onChange={updateField} /></div>
+            <div className="field textarea-field"><textarea name="message" placeholder="Message" aria-label="Message" required value={form.message} onChange={updateField} /></div>
+            <input className="hp-field" type="text" name="_honey" tabIndex={-1} autoComplete="off" aria-hidden="true" />
+            <button type="submit" className="btn btn-primary submit-btn" disabled={formStatus.state === 'sending'}>
+              {formStatus.state === 'sending' ? 'Sending...' : 'Submit'}
+            </button>
+            <p className={`form-status ${formStatus.state}`} role="status" aria-live="polite">{formStatus.message}</p>
           </form>
         </section>
 

@@ -1855,3 +1855,44 @@ h2 {
     height: 260px;
   }
 }
+
+
+/* Contact form feedback */
+.hp-field {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.submit-btn:disabled {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.form-status {
+  margin: 14px 0 0;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.form-status:empty {
+  display: none;
+}
+
+.form-status.sent {
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(214, 229, 244, 0.7);
+  color: var(--primary);
+  font-weight: 500;
+}
+
+.form-status.error {
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(180, 35, 24, 0.08);
+  color: #b42318;
+}
