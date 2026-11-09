@@ -272,6 +272,10 @@ const renderStatIcon = (icon) => {
   return icons[icon] || icons.calendar;
 };
 
+// Paste the Web app URL from contact-form/google-apps-script.gs here (it ends in /exec).
+// Enquiries are then emailed to rootflowglobal@gmail.com by Google itself.
+// While this is empty, the form falls back to the FormSubmit service.
+const GOOGLE_SCRIPT_URL = '';
 const CONTACT_EMAIL = 'rootflowglobal@gmail.com';
 const emptyForm = { name: '', email: '', phone: '', organisation: '', country: '', message: '' };
 
@@ -376,21 +380,29 @@ function App() {
 
     setFormStatus({ state: 'sending', message: '' });
     try {
-      const response = await fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-        body: JSON.stringify({
-          name: form.name.trim(),
-          email: form.email.trim(),
-          phone: form.phone.trim(),
-          organisation: form.organisation.trim(),
-          country: form.country.trim(),
-          message: form.message.trim(),
-          _subject: `New website enquiry from ${form.name.trim()}`,
-          _template: 'table',
-          _captcha: 'false',
-        }),
-      });
+      const fields = {
+        name: form.name.trim(),
+        email: form.email.trim(),
+        phone: form.phone.trim(),
+        organisation: form.organisation.trim(),
+        country: form.country.trim(),
+        message: form.message.trim(),
+      };
+      // A plain form-encoded body is a "simple" request, so the browser sends it
+      // straight to Google without a CORS preflight.
+      const request = GOOGLE_SCRIPT_URL
+        ? fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: new URLSearchParams(fields) })
+        : fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({
+              ...fields,
+              _subject: `New website enquiry from ${fields.name}`,
+              _template: 'table',
+              _captcha: 'false',
+            }),
+          });
+      const response = await request;
       const result = await response.json().catch(() => ({}));
       if (response.ok && (result.success === true || result.success === 'true')) {
         setForm(emptyForm);
