@@ -184,6 +184,12 @@ function useSiteAnimations() {
         scrollTrigger: onScroll('.partnership-grid', 'top 85%'),
       });
 
+      // Gallery photos rise in one after another
+      gsap.from('.gallery-item', {
+        y: 60, opacity: 0, duration: 0.9, stagger: 0.1, ease, clearProps: clear,
+        scrollTrigger: onScroll('.gallery-grid', 'top 85%'),
+      });
+
       // Contact form fields
       gsap.from('.contact-form .field, .contact-form .submit-btn', {
         y: 26, opacity: 0, duration: 0.7, stagger: 0.08, ease, clearProps: clear,
@@ -220,6 +226,7 @@ const navItems = [
   { label: 'Our Services', href: '#services' },
   { label: 'Our Network', href: '#network' },
   { label: 'Projects', href: '#projects' },
+  { label: 'Gallery', href: '#gallery' },
   { label: 'Partnership', href: '#partnership' },
   { label: 'Contact Us', href: '#contact' },
 ];
@@ -301,6 +308,17 @@ const businessAreas = [
   },
 ];
 
+const galleryPhotos = [
+  { src: './gallery/01-beve-power-team.jpg', alt: 'The RootFlow team with partners at a manufacturer stand' },
+  { src: './gallery/02-warehouse-forklift.jpg', alt: 'Forklift and stacked stock inside the warehouse' },
+  { src: './gallery/03-solis-partner-meeting.jpg', alt: 'Meeting a manufacturing partner at an exhibition' },
+  { src: './gallery/04-warehouse-stock.jpg', alt: 'Warehouse floor with palletised stock and staff' },
+  { src: './gallery/05-partner-visit.jpg', alt: 'The team with visiting international partners' },
+  { src: './gallery/06-warehouse-mezzanine.jpg', alt: 'Inspecting stock on the warehouse mezzanine' },
+  { src: './gallery/07-trade-fair-meeting.jpg', alt: 'Discussing products with partners at a trade fair' },
+  { src: './gallery/08-delivery-truck.jpg', alt: 'Delivery truck loaded with cartons for dispatch' },
+];
+
 const capabilityImages = [
   './workpics/Untitled (1)/Frame.png',
   './workpics/Untitled (1)/Frame-1.png',
@@ -326,10 +344,28 @@ const partnerBrands = [
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [lightbox, setLightbox] = useState(null);
   const menuRef = useRef(null);
   const topRef = useRef(null);
 
   useSiteAnimations();
+
+  useEffect(() => {
+    if (lightbox === null) return undefined;
+    const total = galleryPhotos.length;
+    const onKey = (event) => {
+      if (event.key === 'Escape') setLightbox(null);
+      if (event.key === 'ArrowRight') setLightbox((i) => (i + 1) % total);
+      if (event.key === 'ArrowLeft') setLightbox((i) => (i - 1 + total) % total);
+    };
+    document.addEventListener('keydown', onKey);
+    const previous = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = previous;
+    };
+  }, [lightbox]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -370,6 +406,15 @@ function App() {
         <span className="blob blob-3" />
       </div>
       <div className="scroll-progress" aria-hidden="true" />
+      {lightbox !== null && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label="Photo viewer" onClick={() => setLightbox(null)}>
+          <button className="lightbox-close" type="button" aria-label="Close photo viewer" onClick={() => setLightbox(null)}>&times;</button>
+          <button className="lightbox-nav lightbox-prev" type="button" aria-label="Previous photo" onClick={(e) => { e.stopPropagation(); setLightbox((lightbox - 1 + galleryPhotos.length) % galleryPhotos.length); }}>&#8249;</button>
+          <img className="lightbox-image" src={galleryPhotos[lightbox].src} alt={galleryPhotos[lightbox].alt} onClick={(e) => e.stopPropagation()} />
+          <button className="lightbox-nav lightbox-next" type="button" aria-label="Next photo" onClick={(e) => { e.stopPropagation(); setLightbox((lightbox + 1) % galleryPhotos.length); }}>&#8250;</button>
+          <span className="lightbox-count">{lightbox + 1} / {galleryPhotos.length}</span>
+        </div>
+      )}
       <a className="enquiry-fab" href="#contact" aria-label="Send an enquiry">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12Z" /></svg>
         <span>Enquiry</span>
@@ -549,6 +594,22 @@ function App() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="section gallery-section container" id="gallery">
+          <div className="section-header">
+            <span className="eyebrow">Gallery</span>
+            <h2>A Look Inside Our Operations</h2>
+          </div>
+          <p className="lead">Moments from our warehouse, our deliveries and the manufacturers and partners we work with.</p>
+
+          <div className="gallery-grid">
+            {galleryPhotos.map(({ src, alt }, index) => (
+              <button key={src} className="gallery-item" type="button" aria-label={`Open photo ${index + 1}: ${alt}`} onClick={() => setLightbox(index)}>
+                <img src={src} alt={alt} loading="lazy" decoding="async" />
+              </button>
+            ))}
           </div>
         </section>
 
