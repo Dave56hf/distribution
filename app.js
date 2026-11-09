@@ -832,10 +832,10 @@ function App() {
               <li>Phone: 08130202741,08168515366</li>
               <li>Address: 
 <br/>
-Lagos Office: Block B, Lofty Heights Office complex, Baderinwa Alabi St, Lekki Phase I, Lekki 106104, Lagos
+Lagos Office: Block B, Lofty Heights Office complex, Baderinwa Alabi St, Lekki Phase I, Lekki 106104, Lagos.
               <br/> 
               <br/> 
-              Abuja Office: Office Complex 078, Wuye Ultra Modern Market, Utako, Abuja,</li>
+              Abuja Office: Office Complex 078, Wuye Ultra Modern Market, Utako, Abuja.</li>
             </ul>
           </div>
         </div>
