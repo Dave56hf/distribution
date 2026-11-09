@@ -343,7 +343,7 @@ const partnerBrands = [
   { name: 'Access Bank', image: './selected brand logos/access-bank-plc-seeklogo.png' },
   { name: 'cemix pro nigeria limited', image: './selected brand logos/cemix pro nigeria limited.png' },
   { name: 'Staleg mall', image: './selected brand logos/Staleg mall.jpg' },
-  { name: 'Instadrop', image: './selected brand logos/IMG-20261109-WA0041.jpg' },
+  { name: 'Instadrop', image: './selected brand logos/IMG-20261109-WA0041(2).jpg' },
 ];
 
 function App() {
