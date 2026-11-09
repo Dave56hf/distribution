@@ -835,7 +835,7 @@ function App() {
 Lagos Office: Block B, Lofty Heights Office complex, Baderinwa Alabi St, Lekki Phase I, Lekki 106104, Lagos
               <br/> 
               <br/> 
-              Abuja Office: Office Complex 078, Wuye Ultra Modern Market, Utako, Abuja,Port harcourt</li>
+              Abuja Office: Office Complex 078, Wuye Ultra Modern Market, Utako, Abuja,</li>
             </ul>
           </div>
         </div>
