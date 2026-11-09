@@ -272,11 +272,6 @@ const renderStatIcon = (icon) => {
   return icons[icon] || icons.calendar;
 };
 
-// Web3Forms access key. Get it free at https://web3forms.com by entering
-// rootflowglobal@gmail.com, then paste the key from that email between the quotes.
-// Enquiries are then emailed to that address. While this is empty, the form
-// falls back to the FormSubmit service.
-const WEB3FORMS_ACCESS_KEY = '';
 const CONTACT_EMAIL = 'rootflowglobal@gmail.com';
 const emptyForm = { name: '', email: '', phone: '', organisation: '', country: '', message: '' };
 
@@ -389,27 +384,16 @@ function App() {
         country: form.country.trim(),
         message: form.message.trim(),
       };
-      const request = WEB3FORMS_ACCESS_KEY
-        ? fetch('https://api.web3forms.com/submit', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body: JSON.stringify({
-              access_key: WEB3FORMS_ACCESS_KEY,
-              subject: `New website enquiry from ${fields.name}`,
-              from_name: 'RootFlow Website',
-              ...fields,
-            }),
-          })
-        : fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body: JSON.stringify({
-              ...fields,
-              _subject: `New website enquiry from ${fields.name}`,
-              _template: 'table',
-              _captcha: 'false',
-            }),
-          });
+      const request = fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          ...fields,
+          _subject: `New website enquiry from ${fields.name}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      });
       const response = await request;
       const result = await response.json().catch(() => ({}));
       if (response.ok && (result.success === true || result.success === 'true')) {
