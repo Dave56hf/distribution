@@ -310,8 +310,8 @@ const capabilityImages = [
 const partnerMetrics = [
   { value: '26,750+', label: 'Strategic partners' },
   { value: '7M+', label: 'sq. ft. of warehousing space' },
-  { value: '117', label: 'sales offices' },
-  { value: '32', label: 'operational warehouses' },
+  { value: '117+', label: 'Brands' },
+  { value: '134+', label: 'Sales Office' },
 ];
 
 const partnerBrands = [
