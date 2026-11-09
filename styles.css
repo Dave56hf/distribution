@@ -1613,3 +1613,29 @@ h2 {
     padding: 16px;
   }
 }
+
+
+/* Business areas: four cards in a 2 x 2 grid */
+.business-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.business-card,
+.business-card.tall {
+  min-height: 380px;
+}
+
+.card-body h3 {
+  font-size: 1.35rem;
+}
+
+@media (max-width: 640px) {
+  .business-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .business-card,
+  .business-card.tall {
+    min-height: 360px;
+  }
+}

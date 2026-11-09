@@ -275,25 +275,29 @@ const heroImages = {
 
 const heroSlides = [
   './Services pic/IMG-20261107-WA0112.jpg',
-  './Services pic/IMG-20261107-WA0111.jpg',
   './Services pic/IMG-20261107-WA0113.jpg',
 ];
 
 const businessAreas = [
   {
-    title: 'Construction Products',
-    text: 'Moving building and construction materials to sites and stockists across Nigeria.',
-    image: './Services pic/IMG-20261107-WA0111.jpg',
-  },
-  {
-    title: 'Pharmaceuticals',
-    text: 'Reliable storage and distribution of pharmaceutical products nationwide.',
+    title: 'Distribution of Technology Products',
+    text: 'Wholesale and retail distribution of computer systems, ICT equipment, telecoms devices, peripherals and accessories to businesses and resellers.',
     image: './Services pic/IMG-20261107-WA0112.jpg',
   },
   {
-    title: 'Technology Products',
-    text: 'Getting technology and electronics from global brands to Nigerian markets.',
+    title: 'Importation and Exportation',
+    text: 'Bringing laptops, desktops, tablets, phones, printers, networking and storage devices from global manufacturers into Nigeria, with clear handling from port to warehouse.',
     image: './Services pic/IMG-20261107-WA0113.jpg',
+  },
+  {
+    title: 'Marketing and Sales of Technology Solutions',
+    text: 'Marketing and selling computers, smart devices, office automation equipment, software and security systems to individuals, companies and institutions.',
+    image: 'https://images.unsplash.com/photo-1622127739239-1905bbaa21b8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
+  },
+  {
+    title: 'IT Solutions and Support',
+    text: 'Supply, installation, configuration, maintenance and repair of computer systems and networking infrastructure, with technical support and systems integration.',
+    image: 'https://images.unsplash.com/photo-1691435828932-911a7801adfb?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080',
   },
 ];
 
@@ -445,8 +449,8 @@ function App() {
           <div className="section-copy">
             <span className="eyebrow">About Our Company</span>
             <h2>A Reliable Distribution Partner in Nigeria</h2>
-            <p>We distribute a wide range of products across Nigeria, combining operational expertise with local market knowledge.</p>
-            <p>Four years of experience distributing pharmaceuticals, technology and construction products across Nigeria.</p>
+            <p>We import, distribute and sell technology products and provide IT solutions across Nigeria, combining operational expertise with local market knowledge.</p>
+            <p>Four years of experience distributing technology products across Nigeria, from computers and electronic devices to ICT and telecommunications equipment.</p>
             <div className="section-actions">
               <a className="btn btn-primary" href="#services">Explore Our Services</a>
             </div>
@@ -462,11 +466,11 @@ function App() {
             <span className="eyebrow">Our Business Areas</span>
             <h2>Our Business Areas</h2>
           </div>
-          <p className="lead">We support three core business areas across pharmaceuticals, technology and construction products distribution.</p>
+          <p className="lead">We import, distribute, market and sell technology products, and back them with practical IT solutions and support.</p>
 
           <div className="business-grid">
-            {businessAreas.map(({ title, text, image }, index) => (
-              <article key={title} className={`business-card ${index === 1 ? 'tall' : ''}`}>
+            {businessAreas.map(({ title, text, image }) => (
+              <article key={title} className="business-card">
                 <div className="card-media" style={{ backgroundImage: `url('${image}')` }} />
                 <div className="card-shade" />
                 <div className="card-body">
