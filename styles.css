@@ -1793,3 +1793,65 @@ h2 {
     bottom: 24px;
   }
 }
+
+
+/* Gallery preview: first photos visible, the rest blurred until opened */
+.gallery-wrap {
+  position: relative;
+  max-height: 780px;
+  overflow: hidden;
+  transition: max-height 1.1s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.gallery-wrap.open {
+  max-height: 3200px;
+}
+
+.gallery-wrap .gallery-grid {
+  margin-top: 28px;
+}
+
+.gallery-fade {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 320px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 28px;
+  background: linear-gradient(180deg, rgba(244, 241, 236, 0) 0%, rgba(244, 241, 236, 0.75) 60%, rgba(244, 241, 236, 0.96) 100%);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 55%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 55%);
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.gallery-more {
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.gallery-wrap.open .gallery-fade {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.gallery-less {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+@media (max-width: 900px) {
+  .gallery-wrap {
+    max-height: 640px;
+  }
+
+  .gallery-fade {
+    height: 260px;
+  }
+}

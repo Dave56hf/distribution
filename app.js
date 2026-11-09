@@ -309,7 +309,7 @@ const businessAreas = [
 ];
 
 const galleryPhotos = [
-  { src: './gallery/01-beve-power-team.jpg', alt: 'The RootFlow team with partners at a manufacturer stand' },
+  { src: './gallery/01-team-with-partners.jpg', alt: 'The RootFlow team with partners at a manufacturer stand' },
   { src: './gallery/02-warehouse-forklift.jpg', alt: 'Forklift and stacked stock inside the warehouse' },
   { src: './gallery/03-solis-partner-meeting.jpg', alt: 'Meeting a manufacturing partner at an exhibition' },
   { src: './gallery/04-warehouse-stock.jpg', alt: 'Warehouse floor with palletised stock and staff' },
@@ -345,6 +345,7 @@ const partnerBrands = [
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [lightbox, setLightbox] = useState(null);
+  const [galleryOpen, setGalleryOpen] = useState(false);
   const menuRef = useRef(null);
   const topRef = useRef(null);
 
@@ -604,13 +605,50 @@ function App() {
           </div>
           <p className="lead">Moments from our warehouse, our deliveries and the manufacturers and partners we work with.</p>
 
-          <div className="gallery-grid">
-            {galleryPhotos.map(({ src, alt }, index) => (
-              <button key={src} className="gallery-item" type="button" aria-label={`Open photo ${index + 1}: ${alt}`} onClick={() => setLightbox(index)}>
-                <img src={src} alt={alt} loading="lazy" decoding="async" />
+          <div className={`gallery-wrap ${galleryOpen ? 'open' : ''}`}>
+            <div className="gallery-grid">
+              {galleryPhotos.map(({ src, alt }, index) => (
+                <button
+                  key={src}
+                  className="gallery-item"
+                  type="button"
+                  tabIndex={galleryOpen || index < 4 ? 0 : -1}
+                  aria-label={`Open photo ${index + 1}: ${alt}`}
+                  onClick={() => setLightbox(index)}
+                >
+                  <img src={src} alt={alt} loading="lazy" decoding="async" />
+                </button>
+              ))}
+            </div>
+            <div className="gallery-fade" aria-hidden={galleryOpen}>
+              <button
+                className="btn btn-primary gallery-more"
+                type="button"
+                onClick={() => {
+                  setGalleryOpen(true);
+                  window.setTimeout(() => window.ScrollTrigger && window.ScrollTrigger.refresh(), 1300);
+                }}
+              >
+                View full gallery
               </button>
-            ))}
+            </div>
           </div>
+          {galleryOpen && (
+            <div className="gallery-less">
+              <button
+                className="btn btn-secondary"
+                type="button"
+                onClick={() => {
+                  setGalleryOpen(false);
+                  const section = document.getElementById('gallery');
+                  if (section) section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  window.setTimeout(() => window.ScrollTrigger && window.ScrollTrigger.refresh(), 1300);
+                }}
+              >
+                Show less
+              </button>
+            </div>
+          )}
         </section>
 
         <section className="section partnership-section container" id="partnership">
