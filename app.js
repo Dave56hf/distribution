@@ -532,7 +532,7 @@ function App() {
               </p>
               <div className="hero-actions">
                 <a className="btn btn-primary" href="#services">Explore Our Services</a>
-                <a className="btn btn-secondary" href="#partnership">Become a Partner</a>
+                <a className="btn btn-secondary" href="#contact">Become a Partner</a>
               </div>
             </div>
             <div className="hero-dots" role="tablist" aria-label="Hero slides">
@@ -819,7 +819,7 @@ function App() {
           <div className="footer-links">
             <h3>Business enquiries</h3>
             <ul>
-              <li><a href="#partnership">Become a partner</a></li>
+              <li><a href="#contact">Become a partner</a></li>
               <li><a href="#contact">Manufacturer enquiries</a></li>
               <li><a href="#contact">Local distribution enquiries</a></li>
             </ul>
