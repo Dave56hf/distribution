@@ -272,10 +272,11 @@ const renderStatIcon = (icon) => {
   return icons[icon] || icons.calendar;
 };
 
-// Paste the Web app URL from contact-form/google-apps-script.gs here (it ends in /exec).
-// Enquiries are then emailed to rootflowglobal@gmail.com by Google itself.
-// While this is empty, the form falls back to the FormSubmit service.
-const GOOGLE_SCRIPT_URL = '';
+// Web3Forms access key. Get it free at https://web3forms.com by entering
+// rootflowglobal@gmail.com, then paste the key from that email between the quotes.
+// Enquiries are then emailed to that address. While this is empty, the form
+// falls back to the FormSubmit service.
+const WEB3FORMS_ACCESS_KEY = '';
 const CONTACT_EMAIL = 'rootflowglobal@gmail.com';
 const emptyForm = { name: '', email: '', phone: '', organisation: '', country: '', message: '' };
 
@@ -388,10 +389,17 @@ function App() {
         country: form.country.trim(),
         message: form.message.trim(),
       };
-      // A plain form-encoded body is a "simple" request, so the browser sends it
-      // straight to Google without a CORS preflight.
-      const request = GOOGLE_SCRIPT_URL
-        ? fetch(GOOGLE_SCRIPT_URL, { method: 'POST', body: new URLSearchParams(fields) })
+      const request = WEB3FORMS_ACCESS_KEY
+        ? fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+            body: JSON.stringify({
+              access_key: WEB3FORMS_ACCESS_KEY,
+              subject: `New website enquiry from ${fields.name}`,
+              from_name: 'RootFlow Website',
+              ...fields,
+            }),
+          })
         : fetch(`https://formsubmit.co/ajax/${CONTACT_EMAIL}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
