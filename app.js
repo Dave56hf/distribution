@@ -831,7 +831,7 @@ function App() {
               <li>Email: rootflowglobal@gmail.com</li>
               <li>Phone: 08130202741,08168515366</li>
               <li>Address: Lagos Office: Block B, Lofty Heights Office complex, Baderinwa Alabi St, Lekki Phase I, Lekki 106104, Lagos
-                  Abuja Office: Office Complex 078, Wuye Ultra Modern Market, Utako, Abuja,Port harcourt</li>
+              </br> Abuja Office: Office Complex 078, Wuye Ultra Modern Market, Utako, Abuja,Port harcourt</li>
             </ul>
           </div>
         </div>
