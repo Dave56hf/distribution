@@ -345,7 +345,6 @@ const partnerBrands = [
   { name: 'Staleg mall', image: './selected brand logos/Staleg mall.jpg' },
   { name: 'Instadrop', image: './selected brand logos/IMG-20261109-WA0041.jpg' },
 ];
-];
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
